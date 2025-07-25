@@ -1,4 +1,5 @@
 let restartButtonElement = document.getElementById("btn-reiniciar");
+let drawButtonElement = document.getElementById("btn-sortear");
 let quantityElement = document.getElementById("quantidade");
 let firstElement = document.getElementById("de");
 let lastElement = document.getElementById("ate");
@@ -11,11 +12,12 @@ function draw() {
     let lastNumber = document.getElementById("ate").value;
 
     if (checkParams(quantityNumber, firstNumber, lastNumber)) {
-    //se estiver tudo certo 
-    getnumbers(quantityNumber, firstNumber, lastNumber); 
-    ajustRestartButton(true);  
+        getnumbers(quantityNumber, firstNumber, lastNumber); 
+        ajustRestartButton(true);
+        ajustDrawButton(false);  
     };
     ajustRestartButton(false);
+    ajustDrawButton(true);
 }
 
 function getnumbers(quantityNumber, firstNumber, lastNumber) {
@@ -25,23 +27,24 @@ function getnumbers(quantityNumber, firstNumber, lastNumber) {
         number = parseInt(Math.random() * lastNumber);
         if (number > firstNumber) {
             if (numbersSelect.find(numero => numero == number)) {
-                continue;    
-            } else {    
+                console.log("repetido: " + number + "numbersSelect: " + numbersSelect);    
+            } else {
+                console.log("Escolhido: " + number + "numbersSelect: " + numbersSelect);    
                 numbersSelect.push(number);
                 count++
-            }
-        }
-    }
-    alert(numbersSelect)
+            };
+        };
+    };
+    alert(numbersSelect);
 }
 
 function restart() {
     ajustRestartButton(true);
+    ajustDrawButton(false);
     quantityElement.value = '';
     firstElement.value = '';
     lastElement.value = '';
-    let teste = messageElement.getElementsByClassName("text__paragrafo")
-    teste.innerHTML = 'testes';
+    numbersSelect.length = 0; 
 }
 
 function checkParams(quantity, first, last) {
@@ -49,12 +52,12 @@ function checkParams(quantity, first, last) {
     let possibilities = last - first;
 
     if (possibilities < quantity ){
-        message = message + "\n Quantidade informada maior que as possibilidades"
-    }
+        message = message + "\n Quantidade informada maior que as possibilidades";
+    };
 
     if (last < first) {
-        message = message + "\n Valores de inicio e fim incorretos"
-    }
+        message = message + "\n Valores de inicio e fim incorretos";
+    };
 
     if (message != '') {
         alert(message);
@@ -65,6 +68,20 @@ function checkParams(quantity, first, last) {
 }
 
 function ajustRestartButton(buttonDisabled) {
-    restartButtonElement.className = "container__botao";
+    if (buttonDisabled){ 
+        restartButtonElement.className = "container__botao-desabilitado";
+    } else {
+        restartButtonElement.className = "container__botao";
+    };
     restartButtonElement.disabled = buttonDisabled;
+}
+
+function ajustDrawButton(buttonDisabled) {
+    if (buttonDisabled) {
+        drawButtonElement.className = "container__botao-desabilitado"; 
+    } else {
+        drawButtonElement.className = "container__botao";  
+    };
+    
+    drawButtonElement.disabled = buttonDisabled; 
 }
