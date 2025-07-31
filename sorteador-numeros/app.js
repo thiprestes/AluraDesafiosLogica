@@ -1,5 +1,3 @@
-let restartButtonElement = document.getElementById("btn-reiniciar");
-let drawButtonElement = document.getElementById("btn-sortear");
 let quantityElement = document.getElementById("quantidade");
 let firstElement = document.getElementById("de");
 let lastElement = document.getElementById("ate");
@@ -7,17 +5,15 @@ let messageElement = document.getElementById("resultado");
 const numbersSelect = [];
 
 function draw() {
-    let quantityNumber = document.getElementById("quantidade").value;
-    let firstNumber = document.getElementById("de").value;
-    let lastNumber = document.getElementById("ate").value;
+    let quantityNumber = parseInt(document.getElementById("quantidade").value);
+    let firstNumber = parseInt(document.getElementById("de").value);
+    let lastNumber = parseInt(document.getElementById("ate").value);
 
     if (checkParams(quantityNumber, firstNumber, lastNumber)) {
         getnumbers(quantityNumber, firstNumber, lastNumber); 
-        ajustRestartButton(true);
-        ajustDrawButton(false);  
+        ajustRestartButton();
+        ajustDrawButton();  
     };
-    ajustRestartButton(false);
-    ajustDrawButton(true);
 }
 
 function getnumbers(quantityNumber, firstNumber, lastNumber) {
@@ -35,16 +31,17 @@ function getnumbers(quantityNumber, firstNumber, lastNumber) {
             };
         };
     };
-    alert(numbersSelect);
+    alterLabelSelectNumbers();
 }
 
 function restart() {
-    ajustRestartButton(true);
-    ajustDrawButton(false);
     quantityElement.value = '';
     firstElement.value = '';
     lastElement.value = '';
-    numbersSelect.length = 0; 
+    numbersSelect.length = 0;
+    ajustRestartButton();
+    ajustDrawButton();
+    alterLabelSelectNumbers(); 
 }
 
 function checkParams(quantity, first, last) {
@@ -52,12 +49,16 @@ function checkParams(quantity, first, last) {
     let possibilities = last - first;
 
     if (possibilities < quantity ){
-        message = message + "\n Quantidade informada maior que as possibilidades";
+        message = message + "\n Quantidade informada maior que as possibilidades.";
     };
 
     if (last < first) {
-        message = message + "\n Valores de inicio e fim incorretos";
+        message = message + "\n Valores de inicio e fim incorretos.";
     };
+
+    if (quantity <=0 ) {
+       message = message + "\n Informe uma quantidade maior que 0."; 
+    }
 
     if (message != '') {
         alert(message);
@@ -67,21 +68,39 @@ function checkParams(quantity, first, last) {
     return true;
 }
 
-function ajustRestartButton(buttonDisabled) {
-    if (buttonDisabled){ 
-        restartButtonElement.className = "container__botao-desabilitado";
+function ajustRestartButton() {
+    let restartButtonElement = document.getElementById("btn-reiniciar");
+    if (restartButtonElement.classList.contains('container__botao')
+    ) {
+        restartButtonElement.classList.remove('container__botao');
+        restartButtonElement.classList.add('container__botao-desabilitado');
+        restartButtonElement.disabled = true; 
     } else {
-        restartButtonElement.className = "container__botao";
+        restartButtonElement.classList.remove('container__botao-desabilitado');
+        restartButtonElement.classList.add('container__botao');
+        restartButtonElement.disabled = false;
     };
-    restartButtonElement.disabled = buttonDisabled;
 }
 
-function ajustDrawButton(buttonDisabled) {
-    if (buttonDisabled) {
-        drawButtonElement.className = "container__botao-desabilitado"; 
+function ajustDrawButton() {
+    let drawButtonElement = document.getElementById("btn-sortear");
+    if (drawButtonElement.classList.contains('container__botao-desabilitado')
+    ) {
+        drawButtonElement.classList.remove('container__botao-desabilitado');
+        drawButtonElement.classList.add('container__botao');
+        drawButtonElement.disabled = false; 
     } else {
-        drawButtonElement.className = "container__botao";  
+        drawButtonElement.classList.remove('container__botao');
+        drawButtonElement.classList.add('container__botao-desabilitado');
+        drawButtonElement.disabled = true; 
     };
-    
-    drawButtonElement.disabled = buttonDisabled; 
+}
+
+function alterLabelSelectNumbers() {
+    let results = document.getElementById('resultado');
+    if (numbersSelect.length > 0) {
+        results.innerHTML = `<label class="texto__paragrafo">Números sorteados: ${numbersSelect}.</label>`
+    } else {
+        results.innerHTML = `<label class="texto__paragrafo">Números sorteados: nenhum até agora.</label>`
+    }
 }
