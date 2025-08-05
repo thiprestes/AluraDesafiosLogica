@@ -32,10 +32,6 @@ function clearCart(){
     updateTotalCart()   
 }
 
-function checkItem(item, quantity) {
-    
-}
-
 function updateTotalCart() {
     cartTotal.innerHTML = `R$${totalCartValue}`; 
 }
