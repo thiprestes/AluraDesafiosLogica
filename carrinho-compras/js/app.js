@@ -1,6 +1,7 @@
-let totalCartValue = 1400;
+let totalCartValue = 0;
 let cartItems = document.getElementById('lista-produtos');
 let cartTotal = document.getElementById('valor-total');
+clearCart();
 
 function addItem() {
     let quantity = document.getElementById('quantidade').value;
@@ -15,6 +16,7 @@ function addItem() {
         totalCartValue = totalCartValue + (quantity * valueItem); 
         updateTotalCart();
     }
+    document.getElementById('quantidade').value = '';
 }
 
 function clearCart(){
